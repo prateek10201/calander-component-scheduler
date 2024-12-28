@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  darkMode: ["class"],
+  //darkMode: ["class"],
   content: [
     "./pages/**/*.{ts,tsx}",
     "./components/**/*.{ts,tsx}",
@@ -12,9 +12,14 @@ const config = {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
+      padding: {
+        xs:"var(--spur-spacing-xs)",
+        s:"var(--spur-spacing-s)",
+        m:"var(--spur-spacing-m)",
+        l:"var(--spur-spacing-l)",
+        xl:"var(--spur-spacing-xl)",
+        xxl:"var(--spur-spacing-xxl)",
+        xxxl:"var(--spur-spacing-xxxl)",
       },
     },
     extend: {
@@ -25,38 +30,32 @@ const config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
+          DEFAULT: "var(--spur-Core-Blue-Primary)",
+          "blue-light": "var(--spur-Core-Blue-Light)",
+          "core-blue": "var(--spur-Core-Blue)",
         },
         secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
+          DEFAULT: "var(--spur-Warm-Gray-100)",
+          "gray-125": "var(--spur-Warm-Gray-125)",
+          "gray-150": "var(--spur-Warm-Gray-150)",
+          "gray-200": "var(--spur-Warm-Gray-200)",
+          "gray-700": "var(--spur-Warm-Gray-700)",
+          "gray-800": "var(--spur-Warm-Gray-800)",
+          "gray-1100": "var(--spur-Warm-Gray-1100)",
         },
         destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
+          DEFAULT: "var(--spur-Destructive-Red-Primary)",
         },
         muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "var(--spur-overlay)",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        s: "var(--spur-spacing-xs)",
+        m: "calc(var(--spur-spacing-s) + 2px)",
+        l: "var(--spur-spacing-s)",
+        xl: "var(--spur-spacing-l)",
+        xxl: "var(--spur-spacing-xxl)"
       },
       keyframes: {
         "accordion-down": {
