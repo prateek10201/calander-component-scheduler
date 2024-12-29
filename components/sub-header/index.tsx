@@ -8,7 +8,15 @@ import {
   Plus,
 } from "lucide-react";
 
-function SubHeader() {
+function SubHeader({
+  onPrevClick,
+  onNextClick,
+  currentDate,
+}: {
+  onPrevClick: any;
+  onNextClick: any;
+  currentDate: any;
+}) {
   return (
     <div className="flex gap-xs justify-between">
       <div className="flex gap-xs items-center">
@@ -20,8 +28,8 @@ function SubHeader() {
           Schedule Test
         </Button>
         <div className="border-[1px] border-secondary-gray-200 flex items-center rounded-m p-m h-[36px] w-[240px] justify-between">
-          <ChevronLeft />
-          Week of 10/9/24 <ChevronRight />
+          <ChevronLeft onClick={onPrevClick} />
+          Week of {currentDate} <ChevronRight onClick={onNextClick} />
         </div>
       </div>
       <div className="flex bg-secondary-gray-150 rounded-l items-center gap-s">

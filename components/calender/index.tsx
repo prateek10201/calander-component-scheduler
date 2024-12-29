@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   HoverCard,
@@ -7,23 +8,9 @@ import {
 } from "@/components/ui/hover-card";
 import { cn } from "@/lib/utils";
 import { Clock3 } from "lucide-react";
+import { CurrentWeekType } from "@/app/types";
 
-const CalendarGrid = () => {
-  const timeSlots = Array.from({ length: 13 }, (_, i) => {
-    const hour = i + 1;
-    return hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`;
-  });
-
-  const days = [
-    { number: 9, day: "Sun" },
-    { number: 10, day: "Mon" },
-    { number: 11, day: "Tue" },
-    { number: 12, day: "Wed" },
-    { number: 13, day: "Thu" },
-    { number: 14, day: "Fri" },
-    { number: 15, day: "Sat" },
-  ];
-
+const CalendarGrid = ({ currentWeek }: { currentWeek: CurrentWeekType }) => {
   const events = [
     {
       title: "Demo Suite",
@@ -42,7 +29,7 @@ const CalendarGrid = () => {
   ];
 
   return (
-    <Card className="w-full max-w-6xl mx-auto border-0">
+    <Card className="w-full mx-auto border-0 p-8">
       <CardContent className="p-0">
         <div className="flex">
           <div className="w-20">
@@ -52,45 +39,45 @@ const CalendarGrid = () => {
                 PST
               </span>
             </div>
-            {timeSlots.map((time) => (
+            {currentWeek.timeSlots.map((slot, ind) => (
               <div
-                key={time}
+                key={slot.value + ind}
                 className="h-16 flex items-center justify-end pr-4 text-sm text-muted-foreground text-secondary-gray-800"
               >
-                {time}
+                {slot.value} {slot.label}
               </div>
             ))}
           </div>
 
-          <div className="flex-1 border border-gray-200">
-            <div className="grid grid-cols-7 bg-[#DED9D6]">
-              {days.map((day) => (
+          <div className="flex-1 border border-gray-200 rounded-m">
+            <div className="grid grid-cols-7 bg-[#DED9D6] rounded-m rounded-b-none">
+              {currentWeek.days.map((day, ind) => (
                 <div
-                  key={day.number}
+                  key={day.value + ind}
                   className="h-16 flex flex-row items-center justify-center gap-1 border-l first:border-l-0 border-gray-200"
                 >
                   <span className="text-sm text-[18px] text-[#1B1919]">
-                    {day.number}
+                    {day.value}
                   </span>
                   <span className="text-sm text-muted-foreground text-[14px] text-secondary-gray-800">
-                    {day.day}
+                    {day.label}
                   </span>
                 </div>
               ))}
             </div>
 
             <div className="grid grid-cols-7">
-              {days.map((day) => (
+              {currentWeek.days.map((day, ind) => (
                 <div
-                  key={day.number}
+                  key={day.value + ind}
                   className={cn(
                     "border-l first:border-l-0 border-gray-200",
                     "relative"
                   )}
                 >
-                  {timeSlots.map((_, index) => {
+                  {currentWeek.timeSlots.map((_, index) => {
                     const event = events.find(
-                      (e) => e.day === day.number && e.startHour === index + 1
+                      (e) => e.day === day.value && e.startHour === index + 1
                     );
 
                     return (
