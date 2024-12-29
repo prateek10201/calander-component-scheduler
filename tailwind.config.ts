@@ -13,16 +13,25 @@ const config = {
     container: {
       center: true,
       padding: {
-        xs:"var(--spur-spacing-xs)",
-        s:"var(--spur-spacing-s)",
-        m:"var(--spur-spacing-m)",
-        l:"var(--spur-spacing-l)",
-        xl:"var(--spur-spacing-xl)",
-        xxl:"var(--spur-spacing-xxl)",
-        xxxl:"var(--spur-spacing-xxxl)",
+        xs: "var(--spur-spacing-xs)",
+        s: "var(--spur-spacing-s)",
+        m: "var(--spur-spacing-m)",
+        l: "var(--spur-spacing-l)",
+        xl: "var(--spur-spacing-xl)",
+        xxl: "var(--spur-spacing-xxl)",
+        xxxl: "var(--spur-spacing-xxxl)",
       },
     },
     extend: {
+      spacing: {
+        xs: "var(--spur-spacing-xs)",
+        s: "var(--spur-spacing-s)",
+        m: "var(--spur-spacing-m)",
+        l: "var(--spur-spacing-l)",
+        xl: "var(--spur-spacing-xl)",
+        xxl: "var(--spur-spacing-xxl)",
+        xxxl: "var(--spur-spacing-xxxl)",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -55,7 +64,16 @@ const config = {
         m: "calc(var(--spur-spacing-s) + 2px)",
         l: "var(--spur-spacing-s)",
         xl: "var(--spur-spacing-l)",
-        xxl: "var(--spur-spacing-xxl)"
+        xxl: "var(--spur-spacing-xxl)",
+      },
+      gap: {
+        xs: "var(--spur-spacing-xs)",
+        s: "var(--spur-spacing-s)",
+        m: "var(--spur-spacing-m)",
+        l: "var(--spur-spacing-l)",
+        xl: "var(--spur-spacing-xl)",
+        xxl: "var(--spur-spacing-xxl)",
+        xxxl: "var(--spur-spacing-xxxl)",
       },
       keyframes: {
         "accordion-down": {
