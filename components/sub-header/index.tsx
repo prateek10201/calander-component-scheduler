@@ -7,6 +7,7 @@ import {
   List,
   Plus,
 } from "lucide-react";
+import ScheduleTestDialog from "../modal";
 
 function SubHeader({
   onPrevClick,
@@ -20,13 +21,15 @@ function SubHeader({
   return (
     <div className="flex gap-xs justify-between">
       <div className="flex gap-xs items-center">
-        <Button
-          variant="default"
-          className="text-white px-l py-s gap-s h-[36px] w-[145px]"
-        >
-          <Plus />
-          Schedule Test
-        </Button>
+        <ScheduleTestDialog>
+          <Button
+            variant="default"
+            className="text-white px-l py-s gap-s h-[36px] w-[145px]"
+          >
+            <Plus />
+            Schedule Test
+          </Button>
+        </ScheduleTestDialog>
         <div className="border-[1px] border-secondary-gray-200 flex items-center rounded-m p-m h-[36px] w-[240px] justify-between">
           <ChevronLeft onClick={onPrevClick} />
           Week of {currentDate} <ChevronRight onClick={onNextClick} />
