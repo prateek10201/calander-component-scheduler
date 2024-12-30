@@ -16,7 +16,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../date-time-picker";
-import { format, fromUnixTime } from "date-fns";
 import dayjs, { Dayjs } from "dayjs";
 import { DB } from "@/utils/supabase/client";
 
@@ -74,7 +73,6 @@ const ScheduleTestDialog = ({
       if (error) {
         throw error;
       }
-      console.log(data);
       onDone();
       setOpen(false);
     } catch (e) {
