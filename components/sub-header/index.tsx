@@ -13,15 +13,17 @@ function SubHeader({
   onPrevClick,
   onNextClick,
   currentDate,
+  onDone,
 }: {
   onPrevClick: any;
   onNextClick: any;
   currentDate: any;
+  onDone: Function;
 }) {
   return (
     <div className="flex gap-xs justify-between">
       <div className="flex gap-xs items-center">
-        <ScheduleTestDialog>
+        <ScheduleTestDialog onDone={onDone}>
           <Button
             variant="default"
             className="text-white px-l py-s gap-s h-[36px] w-[145px]"

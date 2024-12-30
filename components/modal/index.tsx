@@ -16,24 +16,87 @@ import {
 import { Button } from "@/components/ui/button";
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../date-time-picker";
-import { format } from "date-fns";
-import dayjs from "dayjs";
+import { format, fromUnixTime } from "date-fns";
+import dayjs, { Dayjs } from "dayjs";
+import { DB } from "@/utils/supabase/client";
 
-const ScheduleTestDialog = ({ children }: { children: React.ReactNode }) => {
+const ScheduleTestDialog = ({
+  children,
+  event,
+  onDone,
+}: {
+  children: React.ReactNode;
+  event: any;
+  onDone: Function;
+}) => {
   const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  const [selectedDay, setSelectedDay] = React.useState("Mon");
+  const [open, setOpen] = useState(false);
   const [scheduleFormData, setScheduleFormData] = useState({
-    testSuite: "",
-    dateAndTime: dayjs(),
-    selectDay: "Mon",
+    testSuite: event?.test_suite || "",
+    dateAndTime: event?.date_time ? dayjs.unix(event?.date_time) : dayjs(),
+    selectDay: daysOfWeek[event?.frequency] || "Mon",
   });
-  const handleSave = () => {
-    console.log(scheduleFormData);
+  const handleSave = async () => {
+    try {
+      let dbError = null;
+      if (event && event.tid) {
+        const { data, error } = await DB.from("scheduled-test-event")
+          .update({
+            test_suite: scheduleFormData.testSuite,
+            date_time: scheduleFormData.dateAndTime.unix(),
+            frequency: daysOfWeek.indexOf(scheduleFormData.selectDay),
+          })
+          .eq("tid", event.tid);
+        dbError = error;
+      } else {
+        const { data, error } = await DB.from("scheduled-test-event").insert({
+          test_suite: scheduleFormData.testSuite,
+          date_time: scheduleFormData.dateAndTime.unix(),
+          frequency: daysOfWeek.indexOf(scheduleFormData.selectDay),
+        });
+        dbError = error;
+      }
+      if (dbError) {
+        throw dbError;
+      }
+      onDone();
+      setOpen(false);
+    } catch (e) {
+      console.log("Error ", e);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const { data, error } = await DB.from("scheduled-test-event")
+        .delete()
+        .eq("tid", event.tid);
+      if (error) {
+        throw error;
+      }
+      console.log(data);
+      onDone();
+      setOpen(false);
+    } catch (e) {
+      console.log("Error ", e);
+    }
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+    <Dialog
+      open={open}
+      onOpenChange={(open) => {
+        setOpen(open);
+      }}
+    >
+      <DialogTrigger
+        asChild
+        onClick={() => {
+          setOpen(true);
+        }}
+      >
+        {children}
+      </DialogTrigger>
       <DialogContent className="max-w-[640px] bg-white text-black sm:rounded-xxl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-normal">
@@ -48,19 +111,22 @@ const ScheduleTestDialog = ({ children }: { children: React.ReactNode }) => {
               onValueChange={(value) =>
                 setScheduleFormData({ ...scheduleFormData, testSuite: value })
               }
-              defaultValue="demo"
+              defaultValue={scheduleFormData.testSuite}
             >
               <SelectTrigger className="w-full border-gray-200">
                 <SelectValue placeholder="Select a test suite" />
               </SelectTrigger>
               <SelectContent className="bg-white border-1 border-gray-200 text-black cursor-pointer">
-                <SelectItem value="demo" className="cursor-pointer">
+                <SelectItem value="Demo Suite" className="cursor-pointer">
                   Demo Suite
                 </SelectItem>
-                <SelectItem value="integration" className="cursor-pointer">
+                <SelectItem
+                  value="Integration Suite"
+                  className="cursor-pointer"
+                >
                   Integration Suite
                 </SelectItem>
-                <SelectItem value="e2e" className="cursor-pointer">
+                <SelectItem value="E2E Suite" className="cursor-pointer">
                   E2E Suite
                 </SelectItem>
               </SelectContent>
@@ -74,9 +140,9 @@ const ScheduleTestDialog = ({ children }: { children: React.ReactNode }) => {
                 type="text"
                 className="w-full p-2 pr-10 border rounded-md bg-white border-gray-200"
                 value={
-                  format(scheduleFormData.dateAndTime, "MM/dd/yy") +
+                  scheduleFormData.dateAndTime.format("MM/DD/YY") +
                   " at " +
-                  format(scheduleFormData.dateAndTime, "hh:mm a") +
+                  scheduleFormData.dateAndTime.format("hh:mm A") +
                   " PST"
                 }
                 placeholder="Select Date and Time"
@@ -85,7 +151,7 @@ const ScheduleTestDialog = ({ children }: { children: React.ReactNode }) => {
 
               <DateTimePicker
                 activeDate={scheduleFormData.dateAndTime}
-                onDateDone={(value: Date) => {
+                onDateDone={(value: Dayjs) => {
                   setScheduleFormData({
                     ...scheduleFormData,
                     dateAndTime: value,
@@ -138,6 +204,7 @@ const ScheduleTestDialog = ({ children }: { children: React.ReactNode }) => {
           <Button
             variant="outline"
             className="text-destructive border-gray-200 hover:bg-red-50 w-full"
+            onClick={handleDelete}
           >
             <CircleX />
             Cancel Schedule

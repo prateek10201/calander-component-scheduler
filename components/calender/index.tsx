@@ -9,8 +9,19 @@ import {
 import { cn } from "@/lib/utils";
 import { Clock3 } from "lucide-react";
 import { CurrentWeekType } from "@/app/types";
+import { isSlotScheduled } from "@/utils/time-manager";
+import { format, fromUnixTime } from "date-fns";
+import ScheduleTestDialog from "../modal";
 
-const CalendarGrid = ({ currentWeek }: { currentWeek: CurrentWeekType }) => {
+const CalendarGrid = ({
+  currentWeek,
+  testSuites,
+  onDone,
+}: {
+  currentWeek: CurrentWeekType;
+  testSuites: any[];
+  onDone: Function;
+}) => {
   const events = [
     {
       title: "Demo Suite",
@@ -29,7 +40,7 @@ const CalendarGrid = ({ currentWeek }: { currentWeek: CurrentWeekType }) => {
   ];
 
   return (
-    <Card className="w-full mx-auto border-0 p-8">
+    <Card className="w-full mx-auto border-0 py-8">
       <CardContent className="p-0">
         <div className="flex">
           <div className="w-20">
@@ -76,9 +87,7 @@ const CalendarGrid = ({ currentWeek }: { currentWeek: CurrentWeekType }) => {
                   )}
                 >
                   {currentWeek.timeSlots.map((_, index) => {
-                    const event = events.find(
-                      (e) => e.day === day.value && e.startHour === index + 1
-                    );
+                    const event = isSlotScheduled(testSuites, day.date, _.date);
 
                     return (
                       <div
@@ -86,32 +95,20 @@ const CalendarGrid = ({ currentWeek }: { currentWeek: CurrentWeekType }) => {
                         className="h-16 border-b border-gray-200"
                       >
                         {event && (
-                          <HoverCard>
-                            <HoverCardTrigger asChild>
-                              <div className="mx-2 p-2 bg-blue-100 rounded cursor-pointer hover:bg-blue-200 transition-colors border-[1px] border-primary-core-blue">
-                                <div className="text-sm font-medium text-primary">
-                                  {event.title}
-                                </div>
-                                <div className="text-xs text-primary flex items-center gap-[5px]">
-                                  <Clock3 className="text-primary w-3 h-3" />{" "}
-                                  {event.time}
-                                </div>
+                          <ScheduleTestDialog onDone={onDone} event={event}>
+                            <div className="mx-2 p-2 bg-blue-100 rounded cursor-pointer hover:bg-blue-200 transition-colors border-[1px] border-primary-core-blue">
+                              <div className="text-sm font-medium text-primary">
+                                {event.test_suite}
                               </div>
-                            </HoverCardTrigger>
-                            <HoverCardContent side="right" className="w-64">
-                              <div className="space-y-2">
-                                <h4 className="text-sm font-semibold">
-                                  {event.title}
-                                </h4>
-                                <p className="text-sm text-muted-foreground">
-                                  {event.description}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  Time: {event.time}
-                                </p>
+                              <div className="text-xs text-primary flex items-center gap-[5px]">
+                                <Clock3 className="text-primary w-3 h-3" />{" "}
+                                {format(
+                                  fromUnixTime(event.date_time),
+                                  "hh:mm a"
+                                ) + " PST"}
                               </div>
-                            </HoverCardContent>
-                          </HoverCard>
+                            </div>
+                          </ScheduleTestDialog>
                         )}
                       </div>
                     );
