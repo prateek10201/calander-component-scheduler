@@ -8,7 +8,7 @@ import {
   generateHourlyInterval,
 } from "@/utils/time-manager";
 import { addDays, format } from "date-fns";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [currentWeek, setCurrentWeek] = useState({
