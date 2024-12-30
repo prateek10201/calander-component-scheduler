@@ -9,6 +9,7 @@ const defaultUrl = process.env.VERCEL_URL
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: "Spur Calender Component",
+  icons: { icon: "icon.png" },
 };
 
 const geistSans = Geist({

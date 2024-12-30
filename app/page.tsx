@@ -1,6 +1,7 @@
 "use client";
 import CalendarGrid from "@/components/calender";
 import SubHeader from "@/components/sub-header";
+import { Toaster } from "@/components/ui/toaster";
 import { DB } from "@/utils/supabase/client";
 import {
   generateDailyIntervalsBasedOnWeek,
@@ -69,6 +70,7 @@ export default function Home() {
         currentWeek={currentWeek}
         testSuites={testSuites}
       />
+      <Toaster />
     </div>
   );
 }

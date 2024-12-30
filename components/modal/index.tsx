@@ -18,6 +18,7 @@ import { DialogTrigger } from "@radix-ui/react-dialog";
 import { DateTimePicker } from "../date-time-picker";
 import dayjs, { Dayjs } from "dayjs";
 import { DB } from "@/utils/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 const ScheduleTestDialog = ({
   children,
@@ -58,10 +59,12 @@ const ScheduleTestDialog = ({
       if (dbError) {
         throw dbError;
       }
+      toast({ title: "Operation has been Completed Successfully!" });
       onDone();
       setOpen(false);
     } catch (e) {
       console.log("Error ", e);
+      toast({ title: "Something Went Wrong!", variant: "destructive" });
     }
   };
 
@@ -73,10 +76,12 @@ const ScheduleTestDialog = ({
       if (error) {
         throw error;
       }
+      toast({ title: "Test has been Deleted Successfully!" });
       onDone();
       setOpen(false);
     } catch (e) {
       console.log("Error ", e);
+      toast({ title: "Something Went Wrong!", variant: "destructive" });
     }
   };
 
